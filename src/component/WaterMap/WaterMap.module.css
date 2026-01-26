@@ -1,0 +1,44 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #050505;
+  overflow: hidden;
+  position: relative;
+  cursor: crosshair;
+  perspective: 1000px;
+}
+
+.uiText {
+  position: fixed;
+  bottom: 50px;
+  left: 50px;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Courier New', monospace;
+  pointer-events: none;
+}
+
+.soundPin {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #fff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 15px #fff;
+}
+
+.ripple {
+  position: absolute;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotateX(70deg); /* 強烈的扁平透視 */
+  pointer-events: none;
+  animation: rippleEffect 3s ease-out forwards;
+}
+
+.d2 { animation-delay: 0.6s; }
+
+@keyframes rippleEffect {
+  0% { width: 0; height: 0; opacity: 1; }
+  100% { width: 1000px; height: 500px; opacity: 0; }
+}
