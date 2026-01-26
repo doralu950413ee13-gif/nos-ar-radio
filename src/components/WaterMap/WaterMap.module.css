@@ -1,0 +1,100 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  overflow: hidden;
+  position: relative;
+  /* 移除整體的 perspective，改為個別處理，解決位移問題 */
+  cursor: crosshair;
+}
+
+/* 放大版標題 */
+.giantHeader {
+  position: absolute;
+  top: 5%; /* 放在上半部 */
+  width: 100%;
+  text-align: center;
+  color: #ffffff;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 4rem; /* 放大標題 */
+  font-weight: bold;
+  letter-spacing: 15px;
+  text-transform: uppercase;
+  pointer-events: none; /* 標題不可點擊 */
+  opacity: 0.9;
+  z-index: 50;
+}
+
+.stage3D {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.emitter {
+  position: absolute;
+  mix-blend-mode: screen;
+}
+
+/* 漣漪：將透視角度寫在這裡，而不是容器上，解決點擊偏移問題 */
+.ripple {
+  position: absolute;
+  border: 5px solid rgba(255, 255, 255, 0.8); 
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  /* 這裡設定 60度 橢圓感，且中心點對齊 */
+  transform: translate(-50%, -50%) rotateX(80deg);
+  animation: rippleEffect 6s linear infinite;
+}
+
+.d1 { animation-delay: 0s; }
+.d2 { animation-delay: 1s; }
+.d3 { animation-delay: 2s; }
+.d4 { animation-delay: 3s; }
+.d5 { animation-delay: 4s; }
+.d6 { animation-delay: 5s; }
+
+@keyframes rippleEffect {
+  0% { 
+    width: 0px;
+    height: 0px;
+    transform: translate(-50%, -50%) rotateX(60deg) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% { 
+    width: 1200px; 
+    height: 1200px; 
+    transform: translate(-50%, -50%) rotateX(60deg) scale(1);
+    opacity: 0;
+  }
+}
+
+.footer {
+  position: absolute;
+  bottom: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 200;
+}
+
+.uploadBar {
+  pointer-events: auto;
+  width: 85%;
+  max-width: 800px;
+  height: 55px;
+  border: 2px solid #ffffff;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #ffffff;
+}
