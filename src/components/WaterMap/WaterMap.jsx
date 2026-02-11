@@ -6,6 +6,8 @@ const WaterMap = () => {
   const [elements, setElements] = useState([]);
   const [soundUrls, setSoundUrls] = useState([]); 
   const fileInputRef = useRef(null);
+  const activeAudiosRef = useRef(new Map()); // To store active Audio objects
+  const lastPlayedSoundUrlRef = useRef(null); // To keep track of the last played sound
 
   useEffect(() => {
     const fetchSounds = async () => {
@@ -29,21 +31,37 @@ const WaterMap = () => {
     const { clientX: x, clientY: y } = e;
     const id = Date.now();
 
+    // Store a reference to the audio object if played
+    let currentAudio = null;
+    if (soundUrls.length > 0) {
+      let randomUrl;
+      // Loop to ensure a different sound is played if possible
+      do {
+        randomUrl = soundUrls[Math.floor(Math.random() * soundUrls.length)];
+      } while (soundUrls.length > 1 && randomUrl === lastPlayedSoundUrlRef.current);
+      
+      lastPlayedSoundUrlRef.current = randomUrl; // Update last played sound
+
+      currentAudio = new Audio(randomUrl);
+      currentAudio.volume = 0.6;
+      currentAudio.play().catch(() => console.log("等待初次互動後播放"));
+      activeAudiosRef.current.set(id, currentAudio); // Store audio with ripple ID
+    }
+
     // 新增水波
     setElements((prev) => [...prev, { id, x, y }]);
 
-    // --- 效能優化：8秒後自動移除水波節點 ---
+    // 移除水波並停止聲音 (8秒後)
     setTimeout(() => {
       setElements((prev) => prev.filter(el => el.id !== id));
+      
+      const audioToStop = activeAudiosRef.current.get(id);
+      if (audioToStop) {
+        audioToStop.pause(); // Stop playback
+        audioToStop.currentTime = 0; // Reset playback position
+        activeAudiosRef.current.delete(id); // Remove from map
+      }
     }, 8000);
-
-    // 播放聲音
-    if (soundUrls.length > 0) {
-      const randomUrl = soundUrls[Math.floor(Math.random() * soundUrls.length)];
-      const audio = new Audio(randomUrl);
-      audio.volume = 0.6;
-      audio.play().catch(() => console.log("等待初次互動後播放"));
-    }
   };
 
   const handleUploadButtonClick = () => {
