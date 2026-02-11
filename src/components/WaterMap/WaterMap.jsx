@@ -75,8 +75,9 @@ const WaterMap = () => {
     try {
       alert("正在將聲音移至水溝中 (Supabase)...");
       
-      const fileExtension = file.name.split('.').pop();
-      const fileName = `${Date.now()}.${fileExtension}`; // Our sanitized filename for Supabase storage key
+      // Use the original filename directly.
+      // Consider sanitizing 'file.name' in a real application to handle special characters or potential security issues.
+      const fileName = file.name;
 
       // Create a Blob from the file content.
       const blob = new Blob([file], { type: file.type });
